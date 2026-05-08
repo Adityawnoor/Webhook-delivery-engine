@@ -19,9 +19,18 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 // ── Redis Connection ───────────────────────────────────────────────────────
 // Support environment-configurable Redis (Docker, staging, production)
-const REDIS_HOST   = process.env.REDIS_HOST || '127.0.0.1';
-const REDIS_PORT   = parseInt(process.env.REDIS_PORT, 10) || 6379;
-const REDIS_CONFIG = { redis: { host: REDIS_HOST, port: REDIS_PORT } };
+const REDIS_HOST     = process.env.REDIS_HOST || '127.0.0.1';
+const REDIS_PORT     = parseInt(process.env.REDIS_PORT, 10) || 6379;
+const REDIS_PASSWORD = process.env.REDIS_PASSWORD || undefined;
+const REDIS_TLS      = process.env.REDIS_TLS === 'true';
+const REDIS_CONFIG   = {
+  redis: {
+    host:     REDIS_HOST,
+    port:     REDIS_PORT,
+    password: REDIS_PASSWORD,
+    tls:      REDIS_TLS ? {} : undefined,
+  }
+};
 
 // ── Bull Queue ────────────────────────────────────────────────────────────
 const webhookQueue = new Bull('webhooks', REDIS_CONFIG);
