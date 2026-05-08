@@ -1,0 +1,1 @@
+./docs/gitbook/changelog.md
